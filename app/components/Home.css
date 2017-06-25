@@ -1,0 +1,15 @@
+.container {
+  background: green;
+  height: 100%;
+  /*flex-direction: column;*/
+  /*flex-flow: column;*/
+}
+
+.content {
+  display: flex;
+  height: 100%;
+}
+
+.header {
+  display: block;
+}

@@ -1,0 +1,18 @@
+{
+  "name": "marco",
+  "productName": "marco",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "Alexander Wang",
+    "email": "blueglue@fastmail.com",
+    "url": "https://github.com/alixander"
+  },
+  "scripts": {
+    "postinstall": "npm rebuild --runtime=electron --target=1.6.6 --disturl=https://atom.io/download/atom-shell --build-from-source"
+  },
+  "license": "MIT",
+  "dependencies": {
+  }
+}
