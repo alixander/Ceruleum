@@ -1,6 +1,6 @@
 {
-  "name": "Marco",
-  "productName": "Marco",
+  "name": "Ceruleum",
+  "productName": "Ceruleum",
   "version": "0.0.1",
   "description": "App",
   "scripts": {
@@ -29,8 +29,8 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "Marco",
-    "appId": "org.alixander.Marco",
+    "productName": "Ceruleum",
+    "appId": "org.alixander.Ceruleum",
     "files": [
       "dist/",
       "node_modules/",
@@ -71,11 +71,11 @@
   },
   "author": {
     "name": "Alexander Wang",
-    "email": "blueglue@fastmail.com",
+    "email": "alixander@fastmail.com",
     "url": "https://github.com/alixander"
   },
   "license": "MIT",
-  "homepage": "https://github.com/alixander/marco#readme",
+  "homepage": "https://github.com/alixander/ceruleum#readme",
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
@@ -110,6 +110,7 @@
     "eslint-import-resolver-webpack": "^0.8.1",
     "eslint-plugin-compat": "^1.0.3",
     "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jest": "^20.0.3",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.0.1",
@@ -143,9 +144,12 @@
     "electron-debug": "^1.1.0",
     "history": "^4.6.1",
     "immutable": "^3.8.1",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
+    "react-addons-css-transition-group": "^15.6.0",
     "react-dom": "^15.5.4",
     "react-hot-loader": "3.0.0-beta.6",
+    "react-icons": "^2.2.5",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",

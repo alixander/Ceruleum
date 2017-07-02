@@ -1,6 +1,15 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-y: hidden;
   height: 100%;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./static/Roboto-Regular.ttf') format('truetype');
+    /* Add other formats as you see fit */
+}
+
+h1, h2, h3, p, div {
+  font-family: 'Roboto';
 }
