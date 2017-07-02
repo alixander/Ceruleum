@@ -1,4 +1,47 @@
 .container {
-  display: inline-block;
   width: 50%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.title {
+  text-align: center;
+}
+
+.section {
+  border-top: 1px dotted black;
+}
+
+.section:first-child {
+  border-top: none;
+}
+
+.filler {
+  height: 15px;
+  width: 100%;
+}
+
+.code {
+  margin: 1rem;
+}
+
+.code pre {
+  background: white !important;
+  overflow-x: hidden !important;
+}
+
+.code pre code {
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  font-family: 'Source Code Pro', monospace !important;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
 }

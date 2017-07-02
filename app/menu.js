@@ -5,7 +5,6 @@ export default class MenuBuilder {
 
   constructor(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow;
-    console.log('is this ever loaded');
   }
 
   buildMenu() {

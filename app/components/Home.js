@@ -12,12 +12,11 @@ export default class Home extends Component {
 
   render() {
     const extraStyles = {
-      width: window.innerWidth,
-      height: window.innerHeight
+      maxWidth: window.innerWidth,
+      height: window.innerHeight - 20
     };
     return (
       <div className={styles.container} style={extraStyles}>
-        <div className={styles.header}>Home</div>
         <div className={styles.content}>
           <Navigator />
           <Display />

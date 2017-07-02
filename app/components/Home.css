@@ -1,15 +1,16 @@
 .container {
-  background: green;
   height: 100%;
+  min-width: 1024px;
   /*flex-direction: column;*/
   /*flex-flow: column;*/
 }
 
 .content {
-  display: flex;
   height: 100%;
+  min-width: 1024px;
 }
 
 .header {
   display: block;
+  font-family: 'Lato', 'Roboto';
 }

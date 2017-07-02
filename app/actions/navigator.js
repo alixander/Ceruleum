@@ -6,10 +6,18 @@ export function displayFile(file) {
   return {
     type: 'DISPLAY_FILE_INTENT',
     data: file
-  }
+  };
+}
+
+export function toggleFolderDisplay(file) {
+  return {
+    type: 'TOGGLE_FOLDER',
+    data: file
+  };
 }
 
 export default {
   refreshFiles,
-  displayFile
+  displayFile,
+  toggleFolderDisplay
 };
