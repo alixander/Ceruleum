@@ -58,9 +58,6 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
-    // Check whether a shortcut is registered.
-  console.log(globalShortcut.isRegistered('CommandOrControl+X'))
-
   mainWindow = new BrowserWindow({
     show: false,
     frame: false
@@ -89,23 +86,21 @@ app.on('ready', async () => {
 
 
   const ret = globalShortcut.register('CommandOrControl+X', () => {
-    console.log('CommandOrControl+X is pressed');
     if (mainWindow.isFocused()) {
       mainWindow.hide();
     } else {
       mainWindow.show();
     }
-  })
+  });
 
   if (!ret) {
     console.log('registration failed');
   }
-
 });
 
 app.on('will-quit', () => {
-  globalShortcut.unregister('CommandOrControl+X')
+  globalShortcut.unregister('CommandOrControl+X');
 
   // Unregister all shortcuts.
-  globalShortcut.unregisterAll()
+  globalShortcut.unregisterAll();
 });

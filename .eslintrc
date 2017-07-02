@@ -23,6 +23,7 @@
     "promise/param-names": "error",
     "promise/always-return": "error",
     "promise/catch-or-return": "error",
+    "jsx-quotes": ["error", "prefer-single"],
     "promise/no-native": "off",
     "react/sort-comp": ["error", {
       "order": ["type-annotations", "static-methods", "lifecycle", "everything-else", "render"]

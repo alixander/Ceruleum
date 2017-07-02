@@ -1,4 +1,4 @@
-import { takeEvery, spawn } from 'redux-saga/effects'
+import { takeEvery, spawn } from 'redux-saga/effects';
 
 import Workers from './workers';
 
@@ -10,8 +10,13 @@ function* watchDisplayFile() {
   yield takeEvery('DISPLAY_FILE_INTENT', Workers.displayFile);
 }
 
+function* watchSetRootDirectory() {
+  yield takeEvery('SET_ROOT_DIRECTORY_INTENT', Workers.onSetRootDirectory);
+}
+
 function* start() {
   yield spawn(watchRefreshFiles);
+  yield spawn(watchSetRootDirectory);
   yield spawn(watchDisplayFile);
 }
 
