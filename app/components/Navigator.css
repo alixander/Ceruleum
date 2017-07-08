@@ -9,7 +9,6 @@
   /*background: #FFFAF0;*/
   height: 100%;
   overflow-y: scroll;
-  overflow: hidden;
 }
 
 .rootSelector {

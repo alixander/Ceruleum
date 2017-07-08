@@ -27,15 +27,17 @@ function getDiffFilenames(rootDirectory) {
   })
 }
 
-function* parseFiles(files) {
-  let filenamesList = files.split('\n');
+// Input: newline delimited paths of files changed
+// Output: tree structure json with name, path, and children as properties of each node
+function* parseFiles(filesGitOutput) {
+  let filenamesList = filesGitOutput.split('\n');
   // The last line always empty line
   filenamesList = filenamesList.slice(0, filenamesList.length - 1);
-  const formattedData = [];
+  const root = {children: []};
   for (let i = 0; i < filenamesList.length; i++) {
     const filename = filenamesList[i];
     const splitFilePath = filename.split('/');
-    let dataPointer = formattedData;
+    let dataPointer = root.children;
     for (let filePathSectionIndex = 0; filePathSectionIndex < splitFilePath.length; filePathSectionIndex++) {
       const filePathSection = splitFilePath[filePathSectionIndex];
       let matchingDir = null;
@@ -62,7 +64,7 @@ function* parseFiles(files) {
       }
     }
   }
-  return formattedData;
+  return root;
 }
 
 export function* onSetRootDirectory() {
@@ -76,10 +78,10 @@ export function* refreshFiles() {
   }
   try {
     const diffedFilenames = yield call(getDiffFilenames, path);
-    const parsedFilenames = yield call(parseFiles, diffedFilenames, path);
+    const parsedFilenamesRoot = yield call(parseFiles, diffedFilenames);
     yield put({
       type: 'REFRESH_FILES',
-      data: parsedFilenames
+      data: parsedFilenamesRoot.children
     });
   } catch (error) {
     yield put({
