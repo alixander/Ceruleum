@@ -3,12 +3,27 @@ import { connect } from 'react-redux';
 import styles from './Code.css';
 import ReactDOM from 'react-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { kimbieLight as syntaxStyle } from 'react-syntax-highlighter/dist/styles';
+import { github as syntaxStyle } from 'react-syntax-highlighter/dist/styles';
 import Utils from '../utils/utils';
 
 export class Code extends Component {
+  constructor() {
+    super();
+    this.state = {};
+    this.oldLineTypes = {};
+    this.newLineTypes = {};
+  }
 
-  getLineStyle(lineNum, sectionLines) {
+  componentWillReceiveProps(nextProps) {
+    if ((nextProps.lines !== this.props.lines) ||
+      (nextProps.isUnifiedView !== this.props.isUnifiedView)) {
+      this.oldLineTypes = {};
+      this.newLineTypes = {};
+    }
+  }
+
+
+  getLineStyle(lineNum, sectionIndex) {
     const oldLineStyle = {
       background: '#FFEEF0'
     };
@@ -16,19 +31,34 @@ export class Code extends Component {
       background: '#E6FFED'
     };
 
-    const lineSplit = sectionLines[lineNum-1].split(' ').filter(word => word.length > 0);
-    if (lineSplit.length < 2) {
-      return {};
+    if (this.props.isOld || this.props.isUnifiedView) {
+      if (this.oldLineTypes[sectionIndex] && this.oldLineTypes[sectionIndex].includes(lineNum-1)) {
+          return oldLineStyle;
+      }
+    }
+    if (!this.props.isOld || this.props.isUnifiedView) {
+      if (this.newLineTypes[sectionIndex] && this.newLineTypes[sectionIndex].includes(lineNum-1)) {
+          return newLineStyle;
+      }
+    }
+    return {};
+  }
+
+  getLineNumberStyle(lineNum, sectionIndex) {
+    const oldLineStyle = {
+      background: 'black !important'
+    };
+    const newLineStyle = {
+      background: 'blue'
+    };
+
+    if (this.oldLineTypes[sectionIndex] && this.oldLineTypes[sectionIndex].includes(lineNum-1)) {
+        return oldLineStyle;
+    }
+    if (this.newLineTypes[sectionIndex] && this.newLineTypes[sectionIndex].includes(lineNum-1)) {
+        return newLineStyle;
     }
 
-    console.log(lineSplit);
-
-    if (lineSplit[1].startsWith('-')) {
-      return oldLineStyle;
-    }
-    if (lineSplit[1].startsWith('+')) {
-      return newLineStyle;
-    }
     return {};
   }
 
@@ -44,7 +74,7 @@ export class Code extends Component {
     return '';
   }
 
-  processOldSection(section) {
+  processOldSection(section, sectionIndex) {
     const output = [];
     const sectionLines = section.get('lines');
     const sectionMetaData = section.get('metaData');
@@ -59,6 +89,10 @@ export class Code extends Component {
         paddingCount += 1;
         currentOtherIndex += 1;
       } else if (this.isOldLine(line)) {
+        if (!this.oldLineTypes[sectionIndex]) {
+          this.oldLineTypes[sectionIndex] = [];
+        }
+        this.oldLineTypes[sectionIndex].push(output.length);
         paddingCount -= 1;
         output.push(`${currentIndex + startIndex} ${line}`);
         currentIndex += 1;
@@ -78,7 +112,7 @@ export class Code extends Component {
     return output;
   }
 
-  processNewSection(section) {
+  processNewSection(section, sectionIndex) {
     const output = [];
     const sectionLines = section.get('lines');
     const sectionMetaData = section.get('metaData');
@@ -93,6 +127,10 @@ export class Code extends Component {
         paddingCount += 1;
         currentOtherIndex += 1;
       } else if (this.isNewLine(line)) {
+        if (!this.newLineTypes[sectionIndex]) {
+          this.newLineTypes[sectionIndex] = [];
+        }
+        this.newLineTypes[sectionIndex].push(output.length);
         paddingCount -= 1;
         output.push(`${currentIndex + startIndex} ${line}`);
         currentIndex += 1;
@@ -112,7 +150,7 @@ export class Code extends Component {
     return output;
   }
 
-  processUnifiedSection(section) {
+  processUnifiedSection(section, sectionIndex) {
     const output = [];
     const sectionLines = section.get('lines');
     const sectionMetaData = section.get('metaData');
@@ -130,11 +168,19 @@ export class Code extends Component {
       const line = sectionLines.get(lineIndex);
       if (this.isOldLine(line)) {
         oldIndex += 1;
+        if (!this.oldLineTypes[sectionIndex]) {
+          this.oldLineTypes[sectionIndex] = [];
+        }
+        this.oldLineTypes[sectionIndex].push(output.length);
         const currentNumDigits = Utils.getNumDigits(oldIndex + oldStartIndex);
         const whitespacePadding = ' '.repeat(maxLineNumChars - currentNumDigits);
         output.push(`${oldIndex + oldStartIndex} ${whitespacePadding} ${line}`);
       } else if (this.isNewLine(line)) {
         newIndex += 1;
+        if (!this.newLineTypes[sectionIndex]) {
+          this.newLineTypes[sectionIndex] = [];
+        }
+        this.newLineTypes[sectionIndex].push(output.length);
         const currentOldNumDigits = Utils.getNumDigits(oldIndex + oldStartIndex);
         const currentNewNumDigits = Utils.getNumDigits(newIndex + newStartIndex);
         const preWhitespacePadding = ' '.repeat(maxOldNumChars);
@@ -153,14 +199,14 @@ export class Code extends Component {
     return output;
   }
 
-  processSection(section) {
+  processSection(section, sectionIndex) {
     if (this.props.isUnifiedView) {
-      return this.processUnifiedSection(section);
+      return this.processUnifiedSection(section, sectionIndex);
     }
     if (this.props.isOld) {
-      return this.processOldSection(section);
+      return this.processOldSection(section, sectionIndex);
     }
-    return this.processNewSection(section);
+    return this.processNewSection(section, sectionIndex);
   }
 
   getMissingLineCount(section) {
@@ -183,13 +229,13 @@ export class Code extends Component {
     const sectionElements = [];
     for (let i = 0; i < this.props.lines.size; i++) {
       const section = this.props.lines.get(i);
-      const sectionLines = this.processSection(section);
+      const sectionLines = this.processSection(section, i);
       sectionElements.push(
         <SyntaxHighlighter
           className={styles.section}
           language='javascript'
           wrapLines={true}
-          lineStyle={(lineNum) => this.getLineStyle(lineNum, sectionLines)}
+          lineStyle={(lineNum) => this.getLineStyle(lineNum, i)}
           style={syntaxStyle}
           key={i}>
           {sectionLines.join('\n')}

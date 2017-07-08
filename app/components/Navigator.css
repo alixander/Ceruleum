@@ -4,12 +4,51 @@
   vertical-align: top;
   padding-right: 1%;
   padding-left: 1%;
-  width: 15%;
   display: inline-block;
   position: fixed;
   /*background: #FFFAF0;*/
   height: 100%;
   overflow-y: scroll;
+  overflow: hidden;
+}
+
+.rootSelector {
+  margin-bottom: 1rem;
+  min-width: 14rem;
+}
+
+.button {
+  font-family: 'Lato';
+  box-shadow: 0px 2px 4px grey;
+  vertical-align: middle;
+  padding: 0.5rem 1rem;
+  background: #183549;
+  outline: none;
+  border: 0;
+  color: #f9f7ec;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 4px 4px grey;
+  cursor: pointer;
+}
+
+.button:active {
+  background: #294d7a;
+}
+
+.buttonText {
+  vertical-align: middle;
+}
+
+.homeIcon {
+  vertical-align: middle;
+  width: 1rem;
+  height: 1rem;
+  padding: 0.2rem;
 }
 
 .file {
@@ -21,6 +60,9 @@
 }
 
 .tree__item {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 14px;
   height: 1rem;
   padding-top: 0.3rem;
@@ -28,7 +70,8 @@
 }
 
 .tree__item:active {
-  opacity: 0.6;
+  color: #294d7a;
+  opacity: 0.8;
 }
 
 .tree__item:hover {
@@ -59,7 +102,6 @@
   color: #183549;
   font-size: 25px;
   margin-bottom: 1rem;
-  padding-bottom: 1rem;
   margin-top: 1rem;
 }
 

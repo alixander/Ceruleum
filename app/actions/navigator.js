@@ -2,6 +2,13 @@ export function refreshFiles() {
   return { type: 'REFRESH_FILES_INTENT' };
 }
 
+export function setRootDirectory(directoryName) {
+  return {
+    type: 'SET_ROOT_DIRECTORY',
+    data: directoryName
+  };
+}
+
 export function displayFile(file) {
   return {
     type: 'DISPLAY_FILE_INTENT',
@@ -19,5 +26,6 @@ export function toggleFolderDisplay(file) {
 export default {
   refreshFiles,
   displayFile,
-  toggleFolderDisplay
+  toggleFolderDisplay,
+  setRootDirectory
 };

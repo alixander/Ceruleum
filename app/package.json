@@ -1,12 +1,12 @@
 {
-  "name": "marco",
-  "productName": "marco",
+  "name": "Ceruluem",
+  "productName": "Ceruluem",
   "version": "1.0.0",
   "description": "",
   "main": "./main.prod.js",
   "author": {
     "name": "Alexander Wang",
-    "email": "blueglue@fastmail.com",
+    "email": "alixander@fastmail.com",
     "url": "https://github.com/alixander"
   },
   "scripts": {

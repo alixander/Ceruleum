@@ -1,7 +1,7 @@
 import { List, Map } from 'immutable';
 
 const INITIAL_STATE = Map({
-  isUnified: true
+  isUnified: false
 });
 
 export default function files(state = INITIAL_STATE, action) {

@@ -1,9 +1,19 @@
 .container {
   vertical-align: top;
   height: 100%;
-  width: 83%;
   display: inline-block;
-  margin-left: 17%;
+  min-width: 30rem;
+}
+
+.errorPrompt {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Lato';
+  background: #8f3230;
+  color: white;
+  padding: 1rem 2rem;
 }
 
 .window {
@@ -12,6 +22,11 @@
 @font-face {
   font-family: 'LatoBold';
   src: url('../static/Lato-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LatoLight';
+  src: url('../static/Lato-Light.ttf') format('truetype');
 }
 
 @keyframes title {
@@ -30,7 +45,7 @@
 
 .titleAnimate {
   animation-name: title;
-  animation-duration: 0.2s;
+  animation-duration: 0.3s;
 }
 
 .word {
@@ -40,16 +55,102 @@
 
 .title {
   text-align: center;
-  /*background: #f5fcf5;*/
-  /*background: #f9f7ec;*/
   background: #183549;
-  width: 90%;
-  margin: 0 auto;
-  border-radius: 0px 0px 40px 40px;
   box-shadow: 0px 1px 5px Grey;
-  /*color: #0f3333;*/
-  font-size: 25px;
+  border-radius: 0px 30px 30px 0px;
+  width: 40%;
+  font-size: 20px;
   margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  padding-top: 1rem;
+  margin-top: 1rem;
+  padding: 1rem 3rem;
+  display: inline-block;
+}
+
+.options {
+  vertical-align: middle;
+  display: inline-block;
+  padding: 1rem 3rem;
+  max-height: 2rem;
+  float: right;
+}
+
+.viewOptionsLabel {
+  display: inline-block;
+}
+
+.switch {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.switch:hover {
+  pointer: cursor;
+}
+
+.button {
+  background: #183549;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  outline: none;
+  font-family: 'Lato';
+}
+
+input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
+label {
+  width: 3rem;
+  text-align: center;
+  font-family: 'Lato';
+  font-size: 15px;
+  opacity: 0.5;
+  color: #f9f7ec;
+  background: #183549;
+  display: inline-block;
+  padding: 5px 20px;
+  transition: opacity 0.2s;
+}
+
+.leftLabel {
+  border-radius: 20px 0px 0px 20px;
+}
+
+.rightLabel {
+  border-radius: 0px 20px 20px 0px;
+}
+
+input[type=radio]:checked + label{
+  opacity: 1;
+  color: #f9f7ec;
+  background: #183549;
+}
+
+input[type=radio]:checked + label:hover {
+  cursor: default;
+}
+
+input[type=radio]:not(:checked) + label:hover {
+  background: #294d7a;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+label + input[type=radio] + label {
+}
+
+.header {
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }

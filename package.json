@@ -1,6 +1,6 @@
 {
-  "name": "Marco",
-  "productName": "Marco",
+  "name": "Ceruleum",
+  "productName": "Ceruleum",
   "version": "0.0.1",
   "description": "App",
   "scripts": {
@@ -29,8 +29,8 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "Marco",
-    "appId": "org.alixander.Marco",
+    "productName": "Ceruleum",
+    "appId": "org.alixander.Ceruleum",
     "files": [
       "dist/",
       "node_modules/",
@@ -71,11 +71,11 @@
   },
   "author": {
     "name": "Alexander Wang",
-    "email": "blueglue@fastmail.com",
+    "email": "alixander@fastmail.com",
     "url": "https://github.com/alixander"
   },
   "license": "MIT",
-  "homepage": "https://github.com/alixander/marco#readme",
+  "homepage": "https://github.com/alixander/ceruleum#readme",
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",

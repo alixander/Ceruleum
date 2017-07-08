@@ -10,8 +10,13 @@ function* watchDisplayFile() {
   yield takeEvery('DISPLAY_FILE_INTENT', Workers.displayFile);
 }
 
+function* watchSetRootDirectory() {
+  yield takeEvery('SET_ROOT_DIRECTORY', Workers.onSetRootDirectory);
+}
+
 function* start() {
   yield spawn(watchRefreshFiles);
+  yield spawn(watchSetRootDirectory);
   yield spawn(watchDisplayFile);
 }
 

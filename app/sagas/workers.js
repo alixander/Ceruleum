@@ -3,10 +3,9 @@ import { put, call, select } from 'redux-saga/effects'
 import { exec } from 'child_process';
 import Utils from '../utils/utils';
 
-function getFileDiffOutput(filePath) {
+function getFileDiffOutput(filePath, rootDirectory) {
   return new Promise((resolve, reject) => {
-    const path = '/Users/alixander/dev/marco/';
-    exec(`git diff HEAD ${filePath}`, { cwd: path }, (err, stdout, ederr) => {
+    exec(`git diff HEAD -- ${filePath}`, { cwd: rootDirectory }, (err, stdout, ederr) => {
       if (err) {
         reject(err);
       } else {
@@ -16,10 +15,9 @@ function getFileDiffOutput(filePath) {
   });
 }
 
-function getDiffFilenames() {
+function getDiffFilenames(rootDirectory) {
   return new Promise((resolve, reject) => {
-    const path = '/Users/alixander/dev/marco/';
-    exec('git diff HEAD --name-only', { cwd: path }, (err, stdout, ederr) => {
+    exec('git diff HEAD --name-only', { cwd: rootDirectory }, (err, stdout, ederr) => {
       if (err) {
         reject(err);
       } else {
@@ -67,13 +65,28 @@ function* parseFiles(files) {
   return formattedData;
 }
 
+export function* onSetRootDirectory() {
+  yield put({type: 'REFRESH_FILES_INTENT'});
+}
+
 export function* refreshFiles() {
-  const diffedFilenames = yield call(getDiffFilenames);
-  const parsedFilenames = yield call(parseFiles, diffedFilenames);
-  yield put({
-    type: 'REFRESH_FILES',
-    data: parsedFilenames
-  })
+  const path = yield select(Utils.getCurrentRootDirectory);
+  if (!path) {
+    return;
+  }
+  try {
+    const diffedFilenames = yield call(getDiffFilenames, path);
+    const parsedFilenames = yield call(parseFiles, diffedFilenames, path);
+    yield put({
+      type: 'REFRESH_FILES',
+      data: parsedFilenames
+    });
+  } catch (error) {
+    yield put({
+      type: 'REFRESH_FILES',
+      data: {isError: true}
+    });
+  }
 }
 
 function getTypeFromLine(line) {
@@ -124,8 +137,6 @@ function parseDiff(diff) {
   const splitDiff = diff.split('\n');
   // Ignore the first few metadata lines
   for (const line of splitDiff.slice(splitDiff.findIndex((diff) => diff.startsWith('@@')), splitDiff.length - 1)) {
-    // Line used for parsing could be different than raw line
-    let usedLine = line;
     if (isLineSectionHeader(line)) {
       const newSection = {
         metaData: {},
@@ -137,19 +148,23 @@ function parseDiff(diff) {
       newSection.metaData.oldDiffMaxIndex = newSection.metaData.oldDiffIndex + sectionMetadata.oldDiffLineCount;
       newSection.metaData.newDiffIndex = sectionMetadata.newDiffStart;
       newSection.metaData.newDiffMaxIndex = newSection.metaData.newDiffIndex + sectionMetadata.newDiffLineCount;
-      usedLine = line.substring(line.lastIndexOf('@') + 1, line.length);
-    }
-    const type = getTypeFromLine(usedLine);
+    } else {
+      const type = getTypeFromLine(line);
 
-    const section = diffSections[diffSections.length - 1];
-    section.lines.push(usedLine);
+      const section = diffSections[diffSections.length - 1];
+      section.lines.push(line);
+    }
   }
   return diffSections;
 }
 
 export function* displayFile(action) {
+  const path = yield select(Utils.getCurrentRootDirectory);
+  if (!path) {
+    return;
+  }
   const file = action.data;
-  const diffOutput = yield call(getFileDiffOutput, file.path);
+  const diffOutput = yield call(getFileDiffOutput, file.path, path);
   const parsedDiff = parseDiff(diffOutput);
   yield put({
     type: 'DISPLAY_FILE',
@@ -163,5 +178,6 @@ export function* displayFile(action) {
 
 export default {
   refreshFiles,
-  displayFile
+  displayFile,
+  onSetRootDirectory
 };

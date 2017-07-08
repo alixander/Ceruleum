@@ -1,8 +1,7 @@
 .container {
   height: 100%;
   min-width: 1024px;
-  /*flex-direction: column;*/
-  /*flex-flow: column;*/
+  overflow-x: hidden;
 }
 
 .content {
@@ -13,4 +12,16 @@
 .header {
   display: block;
   font-family: 'Lato', 'Roboto';
+}
+
+.resizer {
+  background: transparent;
+  height: 100%;
+  width: 1rem;
+  position: absolute;
+  top: 0;
+}
+
+.resizer:hover {
+  cursor: col-resize;
 }

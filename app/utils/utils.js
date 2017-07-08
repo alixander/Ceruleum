@@ -6,7 +6,12 @@ export function getNumDigits(num) {
   return num.toString().length;
 }
 
+export function getCurrentRootDirectory(state) {
+  return state.files.get('rootDirectory');
+}
+
 export default {
   isAnyFileDisplayed,
+  getCurrentRootDirectory,
   getNumDigits
 };

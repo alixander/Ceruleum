@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
+import {remote} from 'electron';
 import { connect } from 'react-redux';
 import styles from './Navigator.css';
 import { displayFile, toggleFolderDisplay } from '../actions/navigator';
 import FileIcon from 'react-icons/lib/go/file-text';
 import FolderIcon from 'react-icons/lib/ti/folder-open';
 import ClosedFolderIcon from 'react-icons/lib/ti/folder';
+import HomeIcon from 'react-icons/lib/go/home';
+import { setRootDirectory } from '../actions/navigator';
 
 export class Navigator extends Component {
+
   onFileClick(file) {
-    this.props.displayFile(file);
+    if (file.path !== this.props.displayedFile.get('path')) {
+      this.props.displayFile(file);
+    }
   }
 
   onDirClick(file) {
@@ -16,7 +22,6 @@ export class Navigator extends Component {
   }
 
   renderFile({file, level, isFolded, isDir}) {
-    const padding = '-'.repeat(level);
     const extraStyles = {
       marginLeft: `${level * 1.5}rem`
     };
@@ -61,14 +66,34 @@ export class Navigator extends Component {
     return treeItems;
   }
 
+	setRootDirectory() {
+    const dialog = remote.require('electron').dialog;
+    dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }, (fileNames) => {
+      if (fileNames === undefined) return;
+      const fileName = fileNames[0];
+      this.props.setRootDirectory(fileName);
+    });
+	}
+
   render() {
     if (!this.props.files) {
       return null;
     }
 
+    const extraContainerStyles = {
+      width: this.props.width
+    };
+
     return (
-      <div className={styles.container}>
+      <div className={styles.container} style={extraContainerStyles}>
         <div className={styles.header}>Files</div>
+        <div className={styles.rootSelector}>
+          <button className={styles.button} onClick={() => this.setRootDirectory()}>
+            <HomeIcon className={styles.homeIcon} /> <span className={styles.buttonText}> Set Home Directory</span>
+          </button>
+        </div>
         <div className={styles.tree}>
           {this.renderTree(this.props.files)}
         </div>
@@ -87,5 +112,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   displayFile,
-  toggleFolderDisplay
+  toggleFolderDisplay,
+  setRootDirectory
 })(Navigator);
