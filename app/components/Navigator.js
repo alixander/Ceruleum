@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import {remote} from 'electron';
+import PropTypes from 'prop-types';
+import { remote } from 'electron';
 import { connect } from 'react-redux';
-import styles from './Navigator.css';
-import { displayFile, toggleFolderDisplay } from '../actions/navigator';
 import FileIcon from 'react-icons/lib/go/file-text';
 import FolderIcon from 'react-icons/lib/ti/folder-open';
 import ClosedFolderIcon from 'react-icons/lib/ti/folder';
 import HomeIcon from 'react-icons/lib/go/home';
-import { setRootDirectory } from '../actions/navigator';
+
+import styles from './Navigator.css';
+import {
+  displayFile,
+  toggleFolderDisplay,
+  setRootDirectory
+} from '../actions/navigator';
 
 export class Navigator extends Component {
 
@@ -21,14 +26,14 @@ export class Navigator extends Component {
     this.props.toggleFolderDisplay(file);
   }
 
-  renderFile({file, level, isFolded, isDir}) {
+  renderFile({ file, level, isFolded, isDir }) {
     const extraStyles = {
       marginLeft: `${level * 1.5}rem`
     };
-    let classes = styles['tree__item'];
-    classes += (' ' + (isDir ? styles.directory : styles.file));
+    let classes = styles.tree__item;
+    classes += ` ${isDir ? styles.directory : styles.file}`;
     if (this.props.displayedFile && this.props.displayedFile.get('path') === file.path) {
-      classes += (' ' + styles['tree__item--displayed']);
+      classes += ` ${styles['tree__item--displayed']}`;
     }
     let icon = <FileIcon className={styles.icon} />;
     if (isDir) {
@@ -41,9 +46,11 @@ export class Navigator extends Component {
     return (
       <div
         key={file.name}
+        role='button'
         onClick={isDir ? () => this.onDirClick(file) : () => this.onFileClick(file)}
         className={classes}
-        style={extraStyles}>
+        style={extraStyles}
+      >
         {icon}
         {file.name}
       </div>
@@ -54,10 +61,10 @@ export class Navigator extends Component {
     const treeItems = [];
     for (const file of files) {
       if (file.children.length === 0) {
-        treeItems.push(this.renderFile({file, level, isDir: false}));
+        treeItems.push(this.renderFile({ file, level, isDir: false }));
       } else {
         const isFolded = this.props.foldedDirectories.includes(file);
-        treeItems.push(this.renderFile({file, level, isFolded, isDir: true}));
+        treeItems.push(this.renderFile({ file, level, isFolded, isDir: true }));
         if (!isFolded) {
           treeItems.push(this.renderTree(file.children, level + 1));
         }
@@ -66,7 +73,7 @@ export class Navigator extends Component {
     return treeItems;
   }
 
-	setRootDirectory() {
+  setRootDirectory() {
     const dialog = remote.require('electron').dialog;
     dialog.showOpenDialog({
       properties: ['openDirectory']
@@ -75,7 +82,7 @@ export class Navigator extends Component {
       const fileName = fileNames[0];
       this.props.setRootDirectory(fileName);
     });
-	}
+  }
 
   render() {
     if (!this.props.files) {
@@ -91,7 +98,8 @@ export class Navigator extends Component {
         <div className={styles.header}>Files</div>
         <div className={styles.rootSelector}>
           <button className={styles.button} onClick={() => this.setRootDirectory()}>
-            <HomeIcon className={styles.homeIcon} /> <span className={styles.buttonText}> Set Home Directory</span>
+            <HomeIcon className={styles.homeIcon} />
+            <span className={styles.buttonText}> Set Home Directory</span>
           </button>
         </div>
         <div className={styles.tree}>
@@ -101,6 +109,16 @@ export class Navigator extends Component {
     );
   }
 }
+
+Navigator.propTypes = {
+  displayedFile: PropTypes.object,
+  foldedDirectories: PropTypes.object,
+  files: PropTypes.object,
+  width: PropTypes.number,
+  displayFile: PropTypes.func.isRequired,
+  setRootDirectory: PropTypes.func.isRequired,
+  toggleFolderDisplay: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
   return {

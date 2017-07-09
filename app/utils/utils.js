@@ -10,8 +10,18 @@ export function getCurrentRootDirectory(state) {
   return state.files.get('rootDirectory');
 }
 
+function isOldLine(line) {
+  return line.startsWith('-');
+}
+
+function isNewLine(line) {
+  return line.startsWith('+');
+}
+
 export default {
   isAnyFileDisplayed,
   getCurrentRootDirectory,
-  getNumDigits
+  getNumDigits,
+  isOldLine,
+  isNewLine
 };

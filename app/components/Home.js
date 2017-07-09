@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { refreshFiles } from '../actions/navigator';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import styles from './Home.css';
 import Navigator from './Navigator';
 import Display from './Display';
 
-export default class Home extends Component {
+export class Home extends Component {
   constructor() {
     super();
     this.state = {
@@ -17,7 +16,7 @@ export default class Home extends Component {
     this.props.refreshFiles();
   }
 
-  onMouseDown(e) {
+  onMouseDown() {
     this.setState({
       resizing: true
     });
@@ -29,17 +28,17 @@ export default class Home extends Component {
     }
     this.setState({
       resizing: true,
-      width: Math.min(e.screenX - 20, 0.9*window.innerWidth)
+      width: Math.min(e.screenX - 20, 0.9 * window.innerWidth)
     });
   }
 
-  onMouseUp(e) {
+  onMouseUp() {
     this.setState({
       resizing: false
     });
   }
 
-  onMouseLeave(e) {
+  onMouseLeave() {
     this.setState({
       resizing: false
     });
@@ -50,7 +49,6 @@ export default class Home extends Component {
       maxWidth: window.innerWidth,
       height: window.innerHeight - 20
     };
-
 
     const extraResizerStyles = {
       width: this.state.resizing ? '500rem' : '0.8rem',
@@ -67,11 +65,17 @@ export default class Home extends Component {
             onMouseMove={(e) => this.onMouseMove(e)}
             onMouseLeave={(e) => this.onMouseLeave(e)}
             className={styles.resizer}
-            style={extraResizerStyles}>
-          </div>
+            style={extraResizerStyles}
+          />
           <Display width={window.innerWidth - this.state.width - 20} />
         </div>
       </div>
     );
   }
 }
+
+Home.propTypes = {
+  refreshFiles: PropTypes.func.isRequired
+};
+
+export default Home;

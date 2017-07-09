@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styles from './Code.css';
-import ReactDOM from 'react-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { github as syntaxStyle } from 'react-syntax-highlighter/dist/styles';
+
+import styles from './Code.css';
 import Utils from '../utils/utils';
+
+function renderFillerLine() {
+  return '';
+}
 
 export class Code extends Component {
   constructor() {
     super();
-    this.state = {};
     this.oldLineTypes = {};
     this.newLineTypes = {};
   }
@@ -22,7 +26,6 @@ export class Code extends Component {
     }
   }
 
-
   getLineStyle(lineNum, sectionIndex) {
     const oldLineStyle = {
       background: '#FFEEF0'
@@ -32,13 +35,15 @@ export class Code extends Component {
     };
 
     if (this.props.isOld || this.props.isUnifiedView) {
-      if (this.oldLineTypes[sectionIndex] && this.oldLineTypes[sectionIndex].includes(lineNum-1)) {
-          return oldLineStyle;
+      if (this.oldLineTypes[sectionIndex] &&
+        this.oldLineTypes[sectionIndex].includes(lineNum - 1)) {
+        return oldLineStyle;
       }
     }
     if (!this.props.isOld || this.props.isUnifiedView) {
-      if (this.newLineTypes[sectionIndex] && this.newLineTypes[sectionIndex].includes(lineNum-1)) {
-          return newLineStyle;
+      if (this.newLineTypes[sectionIndex] &&
+        this.newLineTypes[sectionIndex].includes(lineNum - 1)) {
+        return newLineStyle;
       }
     }
     return {};
@@ -52,26 +57,16 @@ export class Code extends Component {
       background: 'blue'
     };
 
-    if (this.oldLineTypes[sectionIndex] && this.oldLineTypes[sectionIndex].includes(lineNum-1)) {
-        return oldLineStyle;
+    if (this.oldLineTypes[sectionIndex] &&
+      this.oldLineTypes[sectionIndex].includes(lineNum - 1)) {
+      return oldLineStyle;
     }
-    if (this.newLineTypes[sectionIndex] && this.newLineTypes[sectionIndex].includes(lineNum-1)) {
-        return newLineStyle;
+    if (this.newLineTypes[sectionIndex] &&
+      this.newLineTypes[sectionIndex].includes(lineNum - 1)) {
+      return newLineStyle;
     }
 
     return {};
-  }
-
-  isOldLine(line) {
-    return line.startsWith('-');
-  }
-
-  isNewLine(line) {
-    return line.startsWith('+');
-  }
-
-  renderFillerLine() {
-    return '';
   }
 
   processOldSection(section, sectionIndex) {
@@ -81,14 +76,11 @@ export class Code extends Component {
     let currentIndex = 0;
     let paddingCount = 0;
     const startIndex = sectionMetaData.get('oldDiffIndex');
-    let currentOtherIndex = 0;
-    const startOtherIndex = sectionMetaData.get('newDiffIndex');
-    for (let lineIndex = 0; lineIndex < sectionLines.size; lineIndex++) {
+    for (let lineIndex = 0; lineIndex < sectionLines.size; lineIndex += 1) {
       const line = sectionLines.get(lineIndex);
-      if (this.isNewLine(line)) {
+      if (Utils.isNewLine(line)) {
         paddingCount += 1;
-        currentOtherIndex += 1;
-      } else if (this.isOldLine(line)) {
+      } else if (Utils.isOldLine(line)) {
         if (!this.oldLineTypes[sectionIndex]) {
           this.oldLineTypes[sectionIndex] = [];
         }
@@ -97,17 +89,16 @@ export class Code extends Component {
         output.push(`${currentIndex + startIndex} ${line}`);
         currentIndex += 1;
       } else {
-        for (let padding = 0; padding < paddingCount; padding++) {
-          output.push(this.renderFillerLine());
+        for (let padding = 0; padding < paddingCount; padding += 1) {
+          output.push(renderFillerLine());
         }
         paddingCount = 0;
         output.push(`${currentIndex + startIndex} ${line}`);
         currentIndex += 1;
-        currentOtherIndex += 1;
       }
     }
-    for (let padding = 0; padding < paddingCount; padding++) {
-      output.push(this.renderFillerLine());
+    for (let padding = 0; padding < paddingCount; padding += 1) {
+      output.push(renderFillerLine());
     }
     return output;
   }
@@ -118,15 +109,12 @@ export class Code extends Component {
     const sectionMetaData = section.get('metaData');
     let currentIndex = 0;
     const startIndex = sectionMetaData.get('newDiffIndex');
-    let currentOtherIndex = 0;
     let paddingCount = 0;
-    const startOtherIndex = sectionMetaData.get('oldDiffIndex');
-    for (let lineIndex = 0; lineIndex < sectionLines.size; lineIndex++) {
+    for (let lineIndex = 0; lineIndex < sectionLines.size; lineIndex += 1) {
       const line = sectionLines.get(lineIndex);
-      if (this.isOldLine(line)) {
+      if (Utils.isOldLine(line)) {
         paddingCount += 1;
-        currentOtherIndex += 1;
-      } else if (this.isNewLine(line)) {
+      } else if (Utils.isNewLine(line)) {
         if (!this.newLineTypes[sectionIndex]) {
           this.newLineTypes[sectionIndex] = [];
         }
@@ -135,17 +123,16 @@ export class Code extends Component {
         output.push(`${currentIndex + startIndex} ${line}`);
         currentIndex += 1;
       } else {
-        for (let padding = 0; padding < paddingCount; padding++) {
-          output.push(this.renderFillerLine());
+        for (let padding = 0; padding < paddingCount; padding += 1) {
+          output.push(renderFillerLine());
         }
         paddingCount = 0;
         output.push(`${currentIndex + startIndex} ${line}`);
         currentIndex += 1;
-        currentOtherIndex += 1;
       }
     }
-    for (let padding = 0; padding < paddingCount; padding++) {
-      output.push(this.renderFillerLine());
+    for (let padding = 0; padding < paddingCount; padding += 1) {
+      output.push(renderFillerLine());
     }
     return output;
   }
@@ -164,9 +151,9 @@ export class Code extends Component {
 
     const maxLineNumChars = maxOldNumChars + maxNewNumChars;
 
-    for (let lineIndex = 0; lineIndex < sectionLines.size; lineIndex++) {
+    for (let lineIndex = 0; lineIndex < sectionLines.size; lineIndex += 1) {
       const line = sectionLines.get(lineIndex);
-      if (this.isOldLine(line)) {
+      if (Utils.isOldLine(line)) {
         oldIndex += 1;
         if (!this.oldLineTypes[sectionIndex]) {
           this.oldLineTypes[sectionIndex] = [];
@@ -175,13 +162,12 @@ export class Code extends Component {
         const currentNumDigits = Utils.getNumDigits(oldIndex + oldStartIndex);
         const whitespacePadding = ' '.repeat(maxLineNumChars - currentNumDigits);
         output.push(`${oldIndex + oldStartIndex} ${whitespacePadding} ${line}`);
-      } else if (this.isNewLine(line)) {
+      } else if (Utils.isNewLine(line)) {
         newIndex += 1;
         if (!this.newLineTypes[sectionIndex]) {
           this.newLineTypes[sectionIndex] = [];
         }
         this.newLineTypes[sectionIndex].push(output.length);
-        const currentOldNumDigits = Utils.getNumDigits(oldIndex + oldStartIndex);
         const currentNewNumDigits = Utils.getNumDigits(newIndex + newStartIndex);
         const preWhitespacePadding = ' '.repeat(maxOldNumChars);
         const postWhitespacePadding = ' '.repeat(maxNewNumChars - currentNewNumDigits);
@@ -217,31 +203,28 @@ export class Code extends Component {
       if (oldLinesSize < newLinesSize) {
         missingLines = newLinesSize - oldLinesSize;
       }
-    } else {
-      if (oldLinesSize > newLinesSize) {
-        missingLines = oldLinesSize - newLinesSize;
-      }
+    } else if (oldLinesSize > newLinesSize) {
+      missingLines = oldLinesSize - newLinesSize;
     }
     return missingLines;
   }
 
   renderCode() {
     const sectionElements = [];
-    for (let i = 0; i < this.props.lines.size; i++) {
+    for (let i = 0; i < this.props.lines.size; i += 1) {
       const section = this.props.lines.get(i);
       const sectionLines = this.processSection(section, i);
       sectionElements.push(
         <SyntaxHighlighter
           className={styles.section}
-          language='javascript'
           wrapLines={true}
           lineStyle={(lineNum) => this.getLineStyle(lineNum, i)}
           style={syntaxStyle}
-          key={i}>
+          key={i}
+        >
           {sectionLines.join('\n')}
         </SyntaxHighlighter>
       );
-
     }
     return sectionElements;
   }
@@ -265,8 +248,13 @@ export class Code extends Component {
   }
 }
 
+Code.propTypes = {
+  lines: PropTypes.object,
+  isUnifiedView: PropTypes.bool.isRequired,
+  isOld: PropTypes.bool
+};
+
 function mapStateToProps(state) {
-  const displayedFile = state.files.get('displayedFile');
   const props = {};
   props.lines = state.files.getIn(['displayedFile', 'lines']);
   props.isUnifiedView = state.view.get('isUnified');

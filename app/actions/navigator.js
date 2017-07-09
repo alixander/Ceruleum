@@ -10,6 +10,7 @@ export function setRootDirectory(directoryName) {
 }
 
 export function displayFile(file) {
+  console.log('firing action intent');
   return {
     type: 'DISPLAY_FILE_INTENT',
     data: file

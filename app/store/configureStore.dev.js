@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createHashHistory } from 'history';
 import { routerMiddleware, routerActions } from 'react-router-redux';
-import createSagaMiddleware from 'redux-saga'
+import createSagaMiddleware from 'redux-saga';
 import { createLogger } from 'redux-logger';
-import sagas from '../sagas/watchers'
+import sagas from '../sagas/watchers';
 import rootReducer from '../reducers';
 
 const history = createHashHistory();

@@ -21,7 +21,7 @@ export default function files(state = INITIAL_STATE, action) {
       if (state.get('folded').includes(action.data)) {
         return state.merge({
           folded: state.get('folded').filter((dir) => dir !== action.data)
-        })
+        });
       }
       return state.merge({
         folded: state.get('folded').push(action.data)
@@ -37,10 +37,9 @@ export default function files(state = INITIAL_STATE, action) {
         isError: false
       });
     case 'DISPLAY_FILE_INTENT':
-      const newState = state.merge({
+      return state.merge({
         displayedFile: state.get('displayedFile').set('path', action.data.path)
       });
-      return newState;
     case 'DISPLAY_FILE':
       return state.merge({
         displayedFile: action.data

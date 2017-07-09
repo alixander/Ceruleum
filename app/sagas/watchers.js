@@ -1,4 +1,4 @@
-import { takeEvery, spawn } from 'redux-saga/effects'
+import { takeEvery, spawn } from 'redux-saga/effects';
 
 import Workers from './workers';
 
