@@ -5,7 +5,7 @@ const INITIAL_STATE = Map({
   folded: List(),
   displayedFile: Map(),
   isError: false,
-  rootDirectory: '/Users/alixander/dev/PyScribe'
+  rootDirectory: ''
 });
 
 export default function files(state = INITIAL_STATE, action) {
