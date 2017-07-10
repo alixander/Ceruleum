@@ -1,14 +1,13 @@
-<img src="/resources/icon.png" alt="Icon" style="width: 100px;"/>
+<img src="/resources/icons/128x128.png" alt="Icon" style="width: 100px; margin: 0 auto; text-align: center;" />
+
 Ceruleum (Mac App)
 ======
 
 Track the changes to your code going towards your next commit.
 
-Built with Electron and React.
-
 Install
 ------
-[Download latest version](https://github.com/alixander/Ceruleum/releases/tag/v0.1-alpha)
+[Download latest version](https://github.com/alixander/Ceruleum/releases)
 
 Screenshots
 -----
@@ -23,7 +22,9 @@ to keep track of all your changes (variable name, constant value, function signa
 Keep Ceruleum open as a background app and use a keyboard shortcut to quickly toggle it into view to get an
 overview of the changes made.
 
-It's basically a live diff viewer of files staged in version control.
+It's basically an offline, live diff viewer of files staged in version control.
+
+Built with Electron and React.
 
 Usage
 ---------
@@ -34,5 +35,3 @@ TODO
 ---
 - Onboarding
 - Night/day mode
-- Talk about offline
-- Clean up shit
